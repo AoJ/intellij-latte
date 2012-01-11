@@ -21,6 +21,7 @@ package cz.juzna.latte.file;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileTypes.LanguageFileType;
+import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory;
 import cz.juzna.latte.Latte;
 import cz.juzna.latte.LatteIcons;
 import cz.juzna.latte.LatteLanguage;
@@ -48,7 +49,6 @@ public class LatteFileType extends LanguageFileType {
 
     protected LatteFileType() {
         super(LatteLanguage.LATTE_LANGUAGE);
-        // TODO: register highlighter
     }
 
     @NotNull

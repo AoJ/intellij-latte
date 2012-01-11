@@ -14,15 +14,6 @@
   </project-components>
 
 
-
-  <actions>
-      <group id="juzna.test-parent" text="_juznovo" description="Tady je juznovo">
-          <add-to-group group-id="ToolsMenu" anchor="last" />
-          <action id="juzna.test01" class="cz.juzna.intellij.test01.ScreamAction" text="Scream" description="Make some noise" />
-          <action id="juzna.test02" class="cz.juzna.intellij.test01.ScreamAction" text="Scream more" description="Make some more noise" />
-      </group>
-  </actions>
-
   <extensions defaultExtensionNs="com.intellij">
       <fileTypeFactory implementation="cz.juzna.latte.file.LatteFileTypeFactory" />
       <lang.parserDefinition language="Latte" implementationClass="cz.juzna.latte.parser.LatteParserDefinition" />
