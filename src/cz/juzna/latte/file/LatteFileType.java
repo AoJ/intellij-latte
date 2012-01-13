@@ -20,12 +20,17 @@ package cz.juzna.latte.file;
 
 
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.fileTypes.LanguageFileType;
-import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory;
+import com.intellij.openapi.editor.colors.EditorColorsScheme;
+import com.intellij.openapi.editor.highlighter.EditorHighlighter;
+import com.intellij.openapi.fileTypes.*;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 import cz.juzna.latte.Latte;
 import cz.juzna.latte.LatteIcons;
 import cz.juzna.latte.LatteLanguage;
+import cz.juzna.latte.editor.LatteTemplateHighlighter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.Arrays;
@@ -49,6 +54,16 @@ public class LatteFileType extends LanguageFileType {
 
     protected LatteFileType() {
         super(LatteLanguage.LATTE_LANGUAGE);
+
+        // register highlighter - lazy singleton factory
+        FileTypeEditorHighlighterProviders.INSTANCE.addExplicitExtension(this, new EditorHighlighterProvider() {
+            public EditorHighlighter getEditorHighlighter(@Nullable Project project,
+                                                          @NotNull FileType fileType,
+                                                          @Nullable VirtualFile virtualFile,
+                                                          @NotNull EditorColorsScheme editorColorsScheme) {
+                return new LatteTemplateHighlighter(project, virtualFile, editorColorsScheme);
+            }
+        });
     }
 
     @NotNull

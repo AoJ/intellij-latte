@@ -18,7 +18,6 @@
       <fileTypeFactory implementation="cz.juzna.latte.file.LatteFileTypeFactory" />
       <lang.parserDefinition language="Latte" implementationClass="cz.juzna.latte.parser.LatteParserDefinition" />
       <completion.contributor language="Latte" implementationClass="cz.juzna.latte.completion.LatteCompletionContributor" />
-
-    <!-- Add your extensions here -->
+      <lang.fileViewProviderFactory language="Latte" implementationClass="cz.juzna.latte.file.LatteFileViewProviderFactory" />
   </extensions>
 </idea-plugin>

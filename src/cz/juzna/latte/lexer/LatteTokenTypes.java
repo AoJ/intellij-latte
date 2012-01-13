@@ -1,6 +1,7 @@
 package cz.juzna.latte.lexer;
 
 import com.intellij.psi.TokenType;
+import com.intellij.psi.templateLanguages.TemplateDataElementType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
@@ -10,10 +11,19 @@ import cz.juzna.latte.LatteLanguage;
  * @author Jan Dolecek - juzna.cz@gmail.com
  */
 public interface LatteTokenTypes {
+    // large grain parsing
+    public static final IElementType TEMPLATE_HTML_TEXT = new LatteElementType("LATTE_TEMPLATE_HTML_TEXT"); // produced by lexer for all HTML code
+    public static final IElementType OUTER_ELEMENT_TYPE = new LatteElementType("LATTE_FRAGMENT");
+    public static final TemplateDataElementType TEMPLATE_DATA =
+            new TemplateDataElementType("LATTE_TEMPLATE_DATA", LatteLanguage.LATTE_LANGUAGE, TEMPLATE_HTML_TEXT, OUTER_ELEMENT_TYPE);
+    
+    
     IElementType BAD_CHARACTER = TokenType.BAD_CHARACTER;
     IElementType WHITE_SPACE = TokenType.WHITE_SPACE;
     IElementType COMMENT = new LatteElementType("COMMENT");
-    IElementType HTML_TEXT = new LatteElementType("HTML_TEXT");
+
+    @Deprecated
+    IElementType HTML_TEXT = TEMPLATE_HTML_TEXT; //new LatteElementType("HTML_TEXT");
 
     IElementType OPENING = new LatteElementType("OPEN-MACRO");
     IElementType CLOSING = new LatteElementType("CLOSE-MACRO");

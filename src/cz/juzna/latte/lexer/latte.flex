@@ -38,9 +38,10 @@ MACRO_NAME = [^\'\"{} ]+
 <YYINITIAL> {
     {COMMENT}                    { yybegin(YYINITIAL); return COMMENT; }
     {OPENING}/[^\s\'\"{}]        { yybegin(AFTER_LD); return OPENING; }
-    "</"                         { yybegin(TAG_STARTED); return TAG_CLOSING; }
-    "<" / [a-z0-9:]              { yybegin(TAG_STARTED); return TAG_START; }
-    [^{<]+                       { return HTML_TEXT; }
+//    "</"                         { yybegin(TAG_STARTED); return HTML_TEXT; /* TAG_CLOSING; */ }
+//    "<" / [a-z0-9:]              { yybegin(TAG_STARTED); return HTML_TEXT; /* TAG_START; */ }
+//    [^{<]+                       { return HTML_TEXT; }
+    [^{}]+                       { return HTML_TEXT; }
 }
 
 <AFTER_LD> {
@@ -54,14 +55,14 @@ MACRO_NAME = [^\'\"{} ]+
 }
 
 <TAG_STARTED> {
-    [a-z0-9:]+                  { yybegin(IN_TAG); return TAG_NAME; }
+    [a-z0-9:]+                  { yybegin(IN_TAG); return HTML_TEXT; /* TAG_NAME; */ }
 }
 
 <IN_TAG> {
     "n:" [a-z0-9]+              { yybegin(ATTR_NAME); return N_ATTR; }
     [a-z0-9]+(={STRING})?       { return HTML_TEXT; }
 
-    ">"                         { yybegin(YYINITIAL); return END_TAG; }
+    ">"                         { yybegin(YYINITIAL); return HTML_TEXT; /* END_TAG;*/ }
 }
 
 <ATTR_NAME> {
