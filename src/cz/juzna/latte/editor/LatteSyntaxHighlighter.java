@@ -36,14 +36,26 @@ public class LatteSyntaxHighlighter extends SyntaxHighlighterBase {
     public static final String            KEYWORD_ID       = "Keyword";
     public static final TextAttributesKey KEYWORD          = TextAttributesKey.createTextAttributesKey(KEYWORD_ID, SyntaxHighlighterColors.KEYWORD.getDefaultAttributes().clone());
 
+    public static final String            VARIABLE_ID      = "Variable";
+    public static final TextAttributesKey VARIABLE         = TextAttributesKey.createTextAttributesKey(VARIABLE_ID, SyntaxHighlighterColors.KEYWORD.getDefaultAttributes().clone());
+
+    public static final String            STRING_ID        = "String";
+    public static final TextAttributesKey STRING           = TextAttributesKey.createTextAttributesKey(STRING_ID, SyntaxHighlighterColors.STRING.getDefaultAttributes().clone());
+
+    public static final String            PUNCTUATION_ID   = "Punctuation";
+    public static final TextAttributesKey PUNCTUATION      = TextAttributesKey.createTextAttributesKey(PUNCTUATION_ID, SyntaxHighlighterColors.COMMA.getDefaultAttributes().clone());
+
 
     // Groups of IElementType's
     public static final TokenSet sBAD          = TokenSet.create(LatteTokenTypes.BAD_CHARACTER);
     public static final TokenSet sCOMMENTS     = TokenSet.create(LatteTokenTypes.COMMENT);
     public static final TokenSet sBRACES       = TokenSet.create(LatteTokenTypes.OPENING, LatteTokenTypes.CLOSING);
-    public static final TokenSet sIDENTIFIERS  = TokenSet.create(LatteTokenTypes.TAG_NAME, LatteTokenTypes.MACRO_NAME);
-    public static final TokenSet sATTRS        = TokenSet.create(LatteTokenTypes.ATTR_VALUE, LatteTokenTypes.N_ATTR);
-    public static final TokenSet sKEYWORDS     = TokenSet.create();
+    public static final TokenSet sIDENTIFIERS  = TokenSet.create(LatteTokenTypes.TAG_NAME, LatteTokenTypes.IDENTIFIER);
+    public static final TokenSet sATTRS        = TokenSet.create(LatteTokenTypes.N_ATTR_VALUE, LatteTokenTypes.N_ATTR, LatteTokenTypes.ATTR_NAME);
+    public static final TokenSet sKEYWORDS     = TokenSet.create(LatteTokenTypes.KEYWORD, LatteTokenTypes.MACRO_NAME);
+    public static final TokenSet sSTRINGS      = TokenSet.create(LatteTokenTypes.STRING);
+    public static final TokenSet sVARIABLES    = TokenSet.create(LatteTokenTypes.VARIABLE);
+    public static final TokenSet sPUNCTUATION  = TokenSet.create(LatteTokenTypes.COLON, LatteTokenTypes.SEMICOLON, LatteTokenTypes.EXCLAMATION, LatteTokenTypes.COMMA, LatteTokenTypes.ASSIGN);
 
 
     // Static container
@@ -58,6 +70,9 @@ public class LatteSyntaxHighlighter extends SyntaxHighlighterBase {
         fillMap(ATTRIBUTES, sIDENTIFIERS, IDENTIFIER);
         fillMap(ATTRIBUTES, sATTRS,       ATTR);
         fillMap(ATTRIBUTES, sKEYWORDS,    KEYWORD);
+        fillMap(ATTRIBUTES, sSTRINGS,     STRING);
+        fillMap(ATTRIBUTES, sVARIABLES,   VARIABLE);
+        fillMap(ATTRIBUTES, sPUNCTUATION, PUNCTUATION);
     }
 
 
