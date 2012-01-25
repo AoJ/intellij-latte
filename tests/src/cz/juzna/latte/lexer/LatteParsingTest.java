@@ -1,3 +1,5 @@
+package cz.juzna.latte.lexer;
+
 import com.intellij.lang.LanguageASTFactory;
 import com.intellij.openapi.application.PluginPathManager;
 import com.intellij.psi.PsiFile;

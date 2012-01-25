@@ -41,8 +41,33 @@ public interface LatteTokenTypes {
     IElementType LATTE_STRING = new LatteElementType("LATTE-STRING");
 
     IElementType N_ATTR = new LatteElementType("N-ATTR");
+    IElementType ATTR_NAME = new LatteElementType("ATTR-NAME");
+    IElementType N_ATTR_EQ = new LatteElementType("N-ATTR-EQ");
     IElementType ATTR = new LatteElementType("ATTR");
-    IElementType ATTR_VALUE = new LatteElementType("ATTR-VALUE");
+    IElementType N_ATTR_VALUE = new LatteElementType("ATTR-VALUE");
+    IElementType N_QUOTE = new LatteElementType("QUOTE");
+
+    IElementType KEYWORD = new LatteElementType("KEYWORD");
+    IElementType IDENTIFIER = new LatteElementType("IDENTIFIER");
+    IElementType COLON = new LatteElementType(":");
+    IElementType SEMICOLON = new LatteElementType(";");
+    IElementType ASSIGN = new LatteElementType("ASSIGN");
+    IElementType STRING = new LatteElementType("STRING");
+    IElementType VARIABLE = new LatteElementType("VARIABLE");
+    IElementType EXCLAMATION = new LatteElementType("EXCLAMATION");
+    IElementType NUMBER = new LatteElementType("NUMBER");
+    IElementType COMMA = new LatteElementType(",");
+
+    IElementType OPERATOR = new LatteElementType("OPERATOR");
+
+
+    TokenSet nAttrSet = TokenSet.create(
+            TAG_NAME,
+            ATTR_NAME,
+            N_ATTR_EQ,
+            N_QUOTE,
+            N_ATTR_VALUE
+    );
 
 
 
