@@ -6,6 +6,8 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiWhiteSpace;
+import com.intellij.psi.xml.XmlAttribute;
+import com.intellij.psi.xml.XmlElement;
 import com.intellij.util.ProcessingContext;
 import cz.juzna.latte.lexer.LatteTokenTypes;
 import cz.juzna.latte.psi.impl.MacroNodeImpl;
@@ -47,13 +49,17 @@ public class KeywordCompletionProvider extends CompletionProvider<CompletionPara
 
 	// CompletionResultSet wants list of LookupElements
     private List<LookupElementBuilder> KEYWORD_LOOKUPS = new ArrayList();
+    private List<LookupElementBuilder> ATTR_LOOKUPS = new ArrayList();
     private List<LookupElementBuilder> FILTER_LOOKUPS = new ArrayList();
 	private HashMap<String, LookupElementBuilder> CLOSING_LOOKUPS = new HashMap<String, LookupElementBuilder>();
 
     public KeywordCompletionProvider() {
         super();
 
-        for(String keyword: KEYWORDS) KEYWORD_LOOKUPS.add(LookupElementBuilder.create(keyword));
+        for(String keyword: KEYWORDS) {
+	        KEYWORD_LOOKUPS.add(LookupElementBuilder.create(keyword));
+	        ATTR_LOOKUPS.add(LookupElementBuilder.create("n:" + keyword));
+        }
         for(String filter: FILTERS) FILTER_LOOKUPS.add(LookupElementBuilder.create(filter));
     }
 
@@ -62,8 +68,15 @@ public class KeywordCompletionProvider extends CompletionProvider<CompletionPara
                                   ProcessingContext ctx,
                                   @NotNull CompletionResultSet results) {
 
+	    PsiElement curr = params.getPosition().getOriginalElement();
+
+	    // n: attributes
+	    if(curr.getParent() instanceof XmlAttribute) {
+		    for(LookupElementBuilder x: ATTR_LOOKUPS) results.addElement(x);
+		    return;
+	    }
+
 	    // Keywords
-        PsiElement curr = params.getPosition().getOriginalElement();
         if(curr.getNode().getElementType() == LatteTokenTypes.MACRO_NAME) {
             for(LookupElementBuilder x: KEYWORD_LOOKUPS) results.addElement(x);
 
