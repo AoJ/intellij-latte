@@ -53,7 +53,7 @@ MACRO_NAME = [^\'\"{} ]+
     {IDENTIFIER}                { return IDENTIFIER; }
     ":"                         { return COLON; }
     ";"                         { return SEMICOLON; }
-    "=>"                        { return ASSIGN; }
+    "=>" | "->"                 { return ASSIGN; }
     "$" {IDENTIFIER}            { return VARIABLE; }
     "!"                         { return EXCLAMATION; }
     ","                         { return COMMA; }
