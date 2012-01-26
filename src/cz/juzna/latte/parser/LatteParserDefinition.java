@@ -9,11 +9,15 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import cz.juzna.latte.lexer.LatteLexer;
 import cz.juzna.latte.lexer.LatteTokenTypes;
-import cz.juzna.latte.psi.impl.LatteFile;
+import cz.juzna.latte.psi.impl.LatteFileImpl;
+import cz.juzna.latte.psi.impl.LattePsiElement;
+import cz.juzna.latte.psi.impl.MacroAttrImpl;
+import cz.juzna.latte.psi.impl.MacroNodeImpl;
 import org.jetbrains.annotations.NotNull;
 
 public class LatteParserDefinition implements ParserDefinition {
@@ -53,13 +57,17 @@ public class LatteParserDefinition implements ParserDefinition {
 
     @NotNull
     @Override
-    public PsiElement createElement(ASTNode astNode) {
-        return new ASTWrapperPsiElement(astNode);
+    public PsiElement createElement(ASTNode node) {
+	    IElementType type = node.getElementType();
+
+	    if(type == LatteTokenTypes.MACRO_NODE) return new MacroNodeImpl(node);
+	    else if(type == LatteTokenTypes.MACRO_ATTR) return new MacroAttrImpl(node);
+	    else return new LattePsiElement(node);
     }
 
     @Override
     public PsiFile createFile(FileViewProvider fileViewProvider) {
-        return new LatteFile(fileViewProvider);
+        return new LatteFileImpl(fileViewProvider);
     }
 
     @Override

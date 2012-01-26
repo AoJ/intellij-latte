@@ -4,7 +4,6 @@ import com.intellij.lang.ASTNode;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
 import com.intellij.lang.PsiParser;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
 import cz.juzna.latte.lexer.LatteTokenTypes;
 import org.jetbrains.annotations.NotNull;
@@ -52,7 +51,7 @@ public class LatteParser implements PsiParser {
         if(builder.getTokenType() == LatteTokenTypes.CLOSING) {
             builder.advanceLexer();
         }
-        macroStart.done(LatteTokenTypes.MACRO);
+        macroStart.done(LatteTokenTypes.MACRO_NODE);
     }
 
     // n:link="something"
@@ -88,7 +87,7 @@ public class LatteParser implements PsiParser {
             builder.advanceLexer();
         }
 
-        start.done(LatteTokenTypes.MACRO);
+        start.done(LatteTokenTypes.MACRO_ATTR);
     }
 
     // custom params
