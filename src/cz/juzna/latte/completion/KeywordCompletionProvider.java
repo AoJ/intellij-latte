@@ -8,10 +8,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.util.ProcessingContext;
 import cz.juzna.latte.lexer.LatteTokenTypes;
+import cz.juzna.latte.psi.impl.MacroNodeImpl;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Provides keywords to be auto-completed
@@ -30,6 +30,10 @@ public class KeywordCompletionProvider extends CompletionProvider<CompletionPara
 		    "include", "extends", "block", "define", "snippet", "widget", "control", "href", "link", "plink", "contentType", "status",
     };
 
+	private static final List<String> PAIR_MACROS = Arrays.asList(
+			"if", "ifset", "for", "foreach", "while", "first", "last", "sep"
+	);
+
 	private static final String[] FILTERS = {
 			// static
 			"normalize", "toascii", "webalize", "truncate", "lower", "upper", "firstupper", "capitalize", "trim", "padleft", "padright",
@@ -44,7 +48,7 @@ public class KeywordCompletionProvider extends CompletionProvider<CompletionPara
 	// CompletionResultSet wants list of LookupElements
     private List<LookupElementBuilder> KEYWORD_LOOKUPS = new ArrayList();
     private List<LookupElementBuilder> FILTER_LOOKUPS = new ArrayList();
-
+	private HashMap<String, LookupElementBuilder> CLOSING_LOOKUPS = new HashMap<String, LookupElementBuilder>();
 
     public KeywordCompletionProvider() {
         super();
@@ -62,6 +66,40 @@ public class KeywordCompletionProvider extends CompletionProvider<CompletionPara
         PsiElement curr = params.getPosition().getOriginalElement();
         if(curr.getNode().getElementType() == LatteTokenTypes.MACRO_NAME) {
             for(LookupElementBuilder x: KEYWORD_LOOKUPS) results.addElement(x);
+
+	        HashSet<String> openedMacros = new HashSet<String>(); // macros which are opened before (should complete closing)
+	        HashSet<String> closedMacros = new HashSet<String>(); // which are closed (should not complete closing)
+
+	        // Go up and find open keywords (and offer them for closing)
+	        PsiElement cursor = curr;
+	        while(cursor != null && (cursor.getPrevSibling() != null || cursor.getParent() != null)) {
+		        // macro found {xx} found
+		        if(cursor instanceof MacroNodeImpl) {
+			        MacroNodeImpl node = (MacroNodeImpl) cursor;
+			        String name = node.getMacroName();
+
+			        if(name.charAt(0) == '/') { // closing macro
+				        closedMacros.add(name.substring(1));
+			        } else if(PAIR_MACROS.contains(name)) {
+				        if(closedMacros.contains(name)) closedMacros.remove(name); // is closed later
+				        else openedMacros.add(name); // not closed, let us close it
+			        }
+		        }
+
+
+		        PsiElement tmp;
+		        if((tmp = cursor.getPrevSibling()) != null) cursor = tmp; // Go prev if possible...
+		        else cursor =  cursor.getParent(); // ... or up
+	        }
+
+	        for(String name: openedMacros) {
+		        if(name.equals("if")) {
+			        results.addElement(reuseClosingTag("else"));
+			        results.addElement(reuseClosingTag("elseif"));
+		        }
+		        results.addElement(reuseClosingTag("/" + name));
+	        }
+
 	        results.stopHere();
         }
 
@@ -73,4 +111,13 @@ public class KeywordCompletionProvider extends CompletionProvider<CompletionPara
 		    results.stopHere();
 	    }
     }
+
+	// Get closing tag
+	private LookupElementBuilder reuseClosingTag(String name) {
+		if(!CLOSING_LOOKUPS.containsKey(name)) {
+			CLOSING_LOOKUPS.put(name, LookupElementBuilder.create(name));
+		}
+
+		return CLOSING_LOOKUPS.get(name);
+	}
 }
