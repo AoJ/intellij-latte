@@ -1,7 +1,6 @@
 package cz.juzna.latte.editor;
 
 import com.intellij.lang.Language;
-import com.intellij.lang.StdLanguages;
 import com.intellij.openapi.editor.colors.EditorColorsScheme;
 import com.intellij.openapi.editor.ex.util.LayerDescriptor;
 import com.intellij.openapi.editor.ex.util.LayeredLexerEditorHighlighter;
@@ -24,13 +23,13 @@ public class LatteTemplateHighlighter extends LayeredLexerEditorHighlighter {
         super(new LatteSyntaxHighlighter(), colors);
 
         // highlighter for outer lang
-        FileType type;
+        FileType type = null;
         if(project == null || virtualFile == null) {
             type = StdFileTypes.PLAIN_TEXT;
         } else {
-            Language outerLang = TemplateDataLanguageMappings.getInstance(project).getMapping(virtualFile);
-            if(outerLang == null) outerLang = StdLanguages.HTML;
-            type = outerLang.getAssociatedFileType();
+	        Language language = TemplateDataLanguageMappings.getInstance(project).getMapping(virtualFile);
+	        if(language != null) type = language.getAssociatedFileType();
+            if(type == null) type = StdFileTypes.HTML;
         }
         SyntaxHighlighter outerHighlighter = SyntaxHighlighter.PROVIDER.create(type, project, virtualFile);
 
