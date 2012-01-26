@@ -17,36 +17,33 @@ public interface LatteTokenTypes {
     public static final TemplateDataElementType TEMPLATE_DATA =
             new TemplateDataElementType("LATTE_TEMPLATE_DATA", LatteLanguage.LATTE_LANGUAGE, TEMPLATE_HTML_TEXT, OUTER_ELEMENT_TYPE);
     
-    
+
+	// Common tokens
     IElementType BAD_CHARACTER = TokenType.BAD_CHARACTER;
     IElementType WHITE_SPACE = TokenType.WHITE_SPACE;
     IElementType COMMENT = new LatteElementType("COMMENT");
-
     @Deprecated
-    IElementType HTML_TEXT = TEMPLATE_HTML_TEXT; //new LatteElementType("HTML_TEXT");
+    IElementType HTML_TEXT = TEMPLATE_HTML_TEXT;
 
-    IElementType OPENING = new LatteElementType("OPEN-MACRO");
-    IElementType CLOSING = new LatteElementType("CLOSE-MACRO");
 
-    IElementType LATTE_PARAMS = new LatteElementType("PARAMS");
-    IElementType MACRO_NAME = new LatteElementType("MACRO_NAME");
-    IElementType MACRO = new LatteElementType("MACRO");
-    IElementType PARAMS = new LatteElementType("PARAMS");
+	// TopLexer tokens
+    IElementType OPENING = new LatteElementType("OPEN-MACRO");      // {
+    IElementType MACRO_NAME = new LatteElementType("MACRO_NAME");   //  if
+	IElementType PARAMS = new LatteElementType("PARAMS");           //     $cond
+	IElementType CLOSING = new LatteElementType("CLOSE-MACRO");     //          }
 
-    IElementType TAG_START = new LatteElementType("TAG-START");
-    IElementType TAG_CLOSING = new LatteElementType("TAG-CLOSING");
-    IElementType END_TAG = new LatteElementType("END_TAG");
-    IElementType TAG_NAME = new LatteElementType("TAG-NAME");
-    IElementType OUTER_TEXT = new LatteElementType("OUTER-TEST");
-    IElementType LATTE_STRING = new LatteElementType("LATTE-STRING");
+	IElementType TAG_NAME = new LatteElementType("TAG-NAME");
+	IElementType TAG_CLOSING = new LatteElementType("END_TAG");
 
-    IElementType N_ATTR = new LatteElementType("N-ATTR");
-    IElementType ATTR_NAME = new LatteElementType("ATTR-NAME");
-    IElementType N_ATTR_EQ = new LatteElementType("N-ATTR-EQ");
-    IElementType ATTR = new LatteElementType("ATTR");
-    IElementType N_ATTR_VALUE = new LatteElementType("ATTR-VALUE");
-    IElementType N_QUOTE = new LatteElementType("QUOTE");
+    IElementType N_ATTR = new LatteElementType("N-ATTR");           // n:
+    IElementType ATTR_NAME = new LatteElementType("ATTR-NAME");     //   link
+    IElementType N_ATTR_EQ = new LatteElementType("N-ATTR-EQ");     //       =
+	IElementType N_QUOTE = new LatteElementType("QUOTE");           //        "           "
+	IElementType N_ATTR_VALUE = new LatteElementType("ATTR-VALUE"); //         Pres:detail
+	IElementType ATTR = new LatteElementType("ATTR");
 
+
+	// SubLexer tokens
     IElementType KEYWORD = new LatteElementType("KEYWORD");
     IElementType IDENTIFIER = new LatteElementType("IDENTIFIER");
     IElementType COLON = new LatteElementType(":");
@@ -57,8 +54,16 @@ public interface LatteTokenTypes {
     IElementType EXCLAMATION = new LatteElementType("EXCLAMATION");
     IElementType NUMBER = new LatteElementType("NUMBER");
     IElementType COMMA = new LatteElementType(",");
-
+    IElementType MODIFIER = new LatteElementType("|");
     IElementType OPERATOR = new LatteElementType("OPERATOR");
+
+
+	// Parser
+	IElementType MACRO_NODE = new LatteElementType("MACRO-NODE");
+	IElementType MACRO_ATTR = new LatteElementType("MACRO-ATTR");
+
+
+
 
 
     TokenSet nAttrSet = TokenSet.create(

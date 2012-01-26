@@ -48,6 +48,7 @@ MACRO_NAME = [^\'\"{} ]+
 <YYINITIAL> {
     "as"                        { return KEYWORD; }
 
+	"|"                         { return MODIFIER; }
     {STRING}                    { return STRING; }
     {IDENTIFIER}                { return IDENTIFIER; }
     ":"                         { return COLON; }

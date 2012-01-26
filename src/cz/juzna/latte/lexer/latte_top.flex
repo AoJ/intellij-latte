@@ -111,7 +111,7 @@ MACRO_NAME = [^\'\"{} ]+
 
     {WHITE_SPACE_CHAR}+         { return HTML_TEXT; }
     "/" {WHITE_SPACE_CHAR}* ">" { return HTML_TEXT; }
-    ">"                         { yypopState(); return HTML_TEXT; /* END_TAG; */ }
+    ">"                         { yypopState(); return HTML_TEXT; /* TAG_CLOSING; */ }
 }
 
 
@@ -127,7 +127,7 @@ MACRO_NAME = [^\'\"{} ]+
 
 <ATTR_VALUE_SIMPLE> {
     [^ {}]+                     { return N_ATTR_VALUE; }
-    ">"                         { yypopState(); return END_TAG; }
+    ">"                         { yypopState(); return HTML_TEXT; /*TAG_CLOSING;*/ }
     " "                         { yybegin(IN_TAG); return HTML_TEXT; /*WHITE_SPACE*/ }
 }
 
