@@ -61,12 +61,11 @@ MACRO_NAME = [^\'\"{} ]+
 
 <YYINITIAL> {
     "</"                         { yypushState(CLOSING_TAG_STARTED); return HTML_TEXT; /* TAG_CLOSING; */ }
-    "<" / [a-z0-9:]              { yypushState(TAG_STARTED); return HTML_TEXT; /* TAG_START; */ }
+    "<" / [!a-zA-Z0-9:]              { yypushState(TAG_STARTED); return HTML_TEXT; /* TAG_START; */ }
     [^{}<>]+                     { return HTML_TEXT; }
 }
 
 <YYINITIAL, ATTR_VALUE_SIMPLE, ATTR_VALUE_SINGLE, ATTR_VALUE_DOUBLE> {
-    {COMMENT}                    { return COMMENT; }
     {OPENING}/[^\s\'\"{}]        { yypushState(MACRO_STARTED);    return OPENING; }
 }
 
@@ -99,18 +98,18 @@ MACRO_NAME = [^\'\"{} ]+
 }
 
 <TAG_STARTED, CLOSING_TAG_STARTED> {
-    [a-z0-9:]+                  { yybegin(IN_TAG); return TAG_NAME; }
+    [a-zA-Z0-9:]+               { yybegin(IN_TAG); return TAG_NAME; }
 }
 
 <IN_TAG> {
-    "n:" / [a-z0-9]             { yybegin(N_ATTR_STARTED); return N_ATTR; }
+    "n:" / [a-zA-Z0-9]          { yybegin(N_ATTR_STARTED); return N_ATTR; }
 }
 
 <IN_TAG, N_ATTR_STARTED> {
-    [a-z0-9]+?                  { yybegin(AFTER_ATTR_NAME); return ATTR_NAME; }
+    [-a-zA-Z0-9_]+?             { yybegin(AFTER_ATTR_NAME); return ATTR_NAME; }
 
     {WHITE_SPACE_CHAR}+         { return HTML_TEXT; }
-    "/" {WHITE_SPACE_CHAR}* ">" { return HTML_TEXT; }
+    "/" {WHITE_SPACE_CHAR}* ">" { yypopState(); return HTML_TEXT; }
     ">"                         { yypopState(); return HTML_TEXT; /* TAG_CLOSING; */ }
 }
 
@@ -143,5 +142,6 @@ MACRO_NAME = [^\'\"{} ]+
 
 
 
+{COMMENT}                                { return COMMENT; }
 {WHITE_SPACE_CHAR}+                      { return WHITE_SPACE; }
 .                                        { return BAD_CHARACTER; }
