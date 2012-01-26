@@ -60,9 +60,12 @@ MACRO_NAME = [^\'\"{} ]+
 
 
 <YYINITIAL> {
+	"<!--" .* "-->"              { return HTML_TEXT; }
     "</"                         { yypushState(CLOSING_TAG_STARTED); return HTML_TEXT; /* TAG_CLOSING; */ }
-    "<" / [!a-zA-Z0-9:]              { yypushState(TAG_STARTED); return HTML_TEXT; /* TAG_START; */ }
-    [^{}<>]+                     { return HTML_TEXT; }
+    "<" / [!a-zA-Z0-9:]          { yypushState(TAG_STARTED); return HTML_TEXT; /* TAG_START; */ }
+    [{}<>] / {WHITE_SPACE_CHAR}  { return HTML_TEXT; }
+    "{}"                         { return HTML_TEXT; }
+    [^{<]+                       { return HTML_TEXT; }
 }
 
 <YYINITIAL, ATTR_VALUE_SIMPLE, ATTR_VALUE_SINGLE, ATTR_VALUE_DOUBLE> {
@@ -98,7 +101,7 @@ MACRO_NAME = [^\'\"{} ]+
 }
 
 <TAG_STARTED, CLOSING_TAG_STARTED> {
-    [a-zA-Z0-9:]+               { yybegin(IN_TAG); return TAG_NAME; }
+    [-!a-zA-Z0-9:]+               { yybegin(IN_TAG); return TAG_NAME; }
 }
 
 <IN_TAG> {
@@ -107,7 +110,9 @@ MACRO_NAME = [^\'\"{} ]+
 
 <IN_TAG, N_ATTR_STARTED> {
     [-a-zA-Z0-9_]+?             { yybegin(AFTER_ATTR_NAME); return ATTR_NAME; }
+}
 
+<IN_TAG, N_ATTR_STARTED, AFTER_ATTR_NAME> {
     {WHITE_SPACE_CHAR}+         { return HTML_TEXT; }
     "/" {WHITE_SPACE_CHAR}* ">" { yypopState(); return HTML_TEXT; }
     ">"                         { yypopState(); return HTML_TEXT; /* TAG_CLOSING; */ }

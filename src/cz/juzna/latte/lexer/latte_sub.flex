@@ -58,6 +58,8 @@ MACRO_NAME = [^\'\"{} ]+
     "!"                         { return EXCLAMATION; }
     ","                         { return COMMA; }
     [0-9]+("."[0-9]+)?          { return NUMBER; }
+
+    [<>=][<>=]?[<>=]?           { return OPERATOR; }
 }
 
 {WHITE_SPACE_CHAR}+                      { return WHITE_SPACE; }

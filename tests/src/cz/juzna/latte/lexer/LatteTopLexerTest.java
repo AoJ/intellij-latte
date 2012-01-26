@@ -1,6 +1,12 @@
 package cz.juzna.latte.lexer;
 
 
+import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.psi.impl.DebugUtil;
+import org.apache.tools.ant.types.resources.Tokens;
+
+import java.io.File;
+
 public class LatteTopLexerTest extends AbstractLexerTest {
 
     @Override
@@ -70,6 +76,32 @@ public class LatteTopLexerTest extends AbstractLexerTest {
         assertToken(tokens[4], LatteTokenTypes.N_ATTR_VALUE, "Novak:detail!");
         assertToken(tokens[5], LatteTokenTypes.TEMPLATE_HTML_TEXT, null);
         assertEquals(6, tokens.length);
-
     }
+
+	public void testHtmlTemplate01() throws Exception {
+		String testPath = getTestDataPath() + "/sample01.html"; // plain html, no latte at all
+		String data = FileUtil.loadFile(new File(testPath));
+
+		LexerToken[] tokens = lex(data);
+		assertEquals(1, tokens.length);
+	}
+	
+	public void testHtml01() throws Exception {
+		String[] htmlSnippets = new String[] {
+				"<!DOCTYPE html>",
+				"\n\n<html><head><body>",
+				"<script type=\"text/javascript\" src=\"/js/cms.js\"></script>",
+				"<!-- Load TinyMCE -->",
+				"<div id=\"layout_header\">",
+				"\t<script type=\"text/javascript\">\n" +
+						"\t\tvar x = {};\n" +
+						"\t\tvar y = { a: 1 };\n" +
+						"\t</script>"
+		};
+		
+		for(String snippet: htmlSnippets) {
+			LexerToken[] tokens = lex(snippet);
+			assertEquals("HTML snippet lexed as more than one token: " + snippet, 1, tokens.length);
+		}
+	}
 }

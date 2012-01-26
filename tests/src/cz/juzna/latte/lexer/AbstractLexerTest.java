@@ -1,6 +1,9 @@
 package cz.juzna.latte.lexer;
 
+import com.intellij.ide.plugins.PluginManager;
 import com.intellij.lexer.Lexer;
+import com.intellij.openapi.application.PluginPathManager;
+import com.intellij.openapi.application.ex.PathManagerEx;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.testFramework.PlatformLiteFixture;
 
@@ -9,6 +12,10 @@ import java.util.ArrayList;
 
 public abstract class AbstractLexerTest extends PlatformLiteFixture {
     Lexer lexer;
+
+	protected String getTestDataPath() {
+		return "tests/data";
+	}
 
     protected void assertToken(LexerToken token, IElementType type, String content) {
         if(type != null) assertEquals(type, token.type);
