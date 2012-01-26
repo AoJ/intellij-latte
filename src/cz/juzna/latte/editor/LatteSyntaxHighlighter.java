@@ -55,7 +55,7 @@ public class LatteSyntaxHighlighter extends SyntaxHighlighterBase {
     public static final TokenSet sKEYWORDS     = TokenSet.create(LatteTokenTypes.KEYWORD, LatteTokenTypes.MACRO_NAME);
     public static final TokenSet sSTRINGS      = TokenSet.create(LatteTokenTypes.STRING);
     public static final TokenSet sVARIABLES    = TokenSet.create(LatteTokenTypes.VARIABLE);
-    public static final TokenSet sPUNCTUATION  = TokenSet.create(LatteTokenTypes.COLON, LatteTokenTypes.SEMICOLON, LatteTokenTypes.EXCLAMATION, LatteTokenTypes.COMMA, LatteTokenTypes.ASSIGN);
+    public static final TokenSet sPUNCTUATION  = TokenSet.create(LatteTokenTypes.COLON, LatteTokenTypes.SEMICOLON, LatteTokenTypes.EXCLAMATION, LatteTokenTypes.COMMA, LatteTokenTypes.ASSIGN, LatteTokenTypes.MODIFIER);
 
 
     // Static container
